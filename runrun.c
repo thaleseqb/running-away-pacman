@@ -5,8 +5,22 @@ char** map;
 int lines;
 int columns;
 
-int main() {
+void dynamic_allocation() {
+    map = malloc(sizeof(char*) * lines);
+    for (int idx = 0; idx < lines; idx++) {
+        map[idx] = malloc(sizeof(char) * (columns+1));
+    }
+}
 
+void freemap() {
+    for (int idx = 0; idx < lines; idx++) {
+        free(map[idx]);
+    }
+
+    free(map);
+}
+
+void read_map() {
     FILE* file;
     file = fopen("mapa.txt", "r");
     if (file == 0) {
@@ -17,26 +31,23 @@ int main() {
     fscanf(file, "%d %d", &lines, &columns);
     printf("lines %d columns %d\n", lines, columns);
 
-    map = malloc(sizeof(char*) * lines);
-    for (int idx = 0; idx < lines; idx++) {
-        map[idx] = malloc(sizeof(char) * (columns+1));
-    }
+    dynamic_allocation();
 
     for (int idx = 0; idx < 5; idx++) {
         fscanf(file, "%s", map[idx]);
     }
 
+    fclose(file);
+}
+
+int main() {
+
+    read_map();
+
     for (int idx = 0; idx < 5; idx++) {
         printf("%s\n", map[idx]);
     }
-    
-    fclose(file);
 
-    for (int idx = 0; idx < lines; idx++) {
-        free(map[idx]);
-    }
-
-    free(map);
-
+    freemap(map);
 
 }
