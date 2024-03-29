@@ -10,38 +10,46 @@ int finish() {
     return 0;
 }
 
+int isdirection(char direction) {
+    return direction == LEFT ||
+        direction == RIGHT ||
+        direction == DOWN ||
+        direction == UP;
+}
+
 void moove(char direction) {
-    int x;
-    int y;
 
-    game_map.matrix[coord_position.x][coord_position.y] = '.';
+    if (!isdirection(direction)) return;
 
+    int nextX = coord_position.x;
+    int nextY = coord_position.y;
 
     switch (direction) {
-    case 'w':
-        game_map.matrix[coord_position.x-1][coord_position.y] = '@';
-        coord_position.x--;
+    case UP:
+        nextX--;
         break;
-    case 's':
-        game_map.matrix[coord_position.x+1][coord_position.y] = '@';
-        coord_position.x++;
+    case DOWN:
+        nextX++;
         break;
-    case 'd':
-        game_map.matrix[coord_position.x][coord_position.y+1] = '@';
-        coord_position.y++;
+    case RIGHT:
+        nextY++;
         break;
-    case 'a':
-        game_map.matrix[coord_position.x][coord_position.y-1] = '@';
-        coord_position.y--;
+    case LEFT:
+        nextY--;
         break;
     }
+
+    if (!isvalid(&game_map, nextX, nextY)) return;
+    if (!isempty(&game_map, nextX, nextY)) return;
+
+    walk_on_map(&game_map, &coord_position, nextX, nextY);
     
 }
 
 int main() {
 
     read_map(&game_map);
-    find_pos(&game_map, &coord_position, '@');
+    find_pos(&game_map, &coord_position, CHAR);
 
     do
     {

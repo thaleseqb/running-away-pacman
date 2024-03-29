@@ -2,6 +2,24 @@
 #include <stdlib.h>
 #include "map.h"
 
+int isvalid(MAP* game_map, int x, int y) {
+    if (x >= game_map->lines) return 0;
+    if (y >= game_map->columns) return 0;
+
+    return 1;
+}
+
+int isempty(MAP* game_map, int x, int y) {
+    return game_map->matrix[x][y] == VOID;
+}
+
+void walk_on_map(MAP* game_map, POS* coord_position, int x, int y) {
+    game_map->matrix[x][y] = '@';
+    game_map->matrix[coord_position->x][coord_position->y] = VOID;
+    coord_position->x = x;
+    coord_position->y = y;
+}
+
 void find_pos(MAP* game_map, POS* coord_position, char c) {
     for (int i_idx = 0; i_idx < game_map->lines; i_idx++) {
         for (int j_idx = 0; j_idx < game_map->columns; j_idx++) {
