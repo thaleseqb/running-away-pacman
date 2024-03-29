@@ -1,3 +1,2 @@
-void freemap();
-void read_map();
-void dynamic_allocation();
+int finish();
+void moove(char direction);
