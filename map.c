@@ -1,6 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "map.h"
+
+void copy_map(MAP* final_map, MAP* initial_map) {
+    final_map->lines = initial_map->lines;
+    final_map->columns = initial_map->columns;
+
+    dynamic_allocation(final_map);
+
+    for (int idx = 0; idx < initial_map->lines; idx++) {
+        strcpy(final_map->matrix[idx], initial_map->matrix[idx]);
+    }
+}
 
 int isvalid(MAP* game_map, int x, int y) {
     if (x >= game_map->lines) return 0;
@@ -14,8 +26,6 @@ int isempty(MAP* game_map, int x, int y) {
 }
 
 void walk_on_map(MAP* game_map, int x0, int y0, int x, int y) {
-    
-
     char character = game_map->matrix[x0][y0];
     game_map->matrix[x][y] = character;
     game_map->matrix[x0][y0] = VOID;

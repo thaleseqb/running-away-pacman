@@ -6,6 +6,21 @@
 MAP game_map;
 POS coord_position;
 
+void phantom_move() {
+    MAP copy;
+    copy_map(&copy, &game_map);
+
+    for (int i_idx = 0; i_idx < game_map.lines; i_idx++) {
+        for (int j_idx = 0; j_idx < game_map.columns; j_idx++) {
+            if (copy.matrix[i_idx][j_idx] == PHANTOM) {
+                if (isvalid(&game_map, i_idx, j_idx + 1) && isempty(&game_map, i_idx, j_idx + 1)) {
+                    walk_on_map(&game_map, i_idx, j_idx, i_idx, j_idx + 1);
+                }
+            }
+        }
+    }
+}
+
 int finish() {
     return 0;
 }
@@ -60,6 +75,7 @@ int main() {
         scanf(" %c", &command);
 
         moove(command);
+        phantom_move();
 
     } while (!finish() );
     

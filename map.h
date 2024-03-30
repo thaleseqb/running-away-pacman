@@ -1,5 +1,6 @@
 #define CHAR '@'
 #define VOID '.'
+#define PHANTOM 'F'
 #define VERTICAL_WALL '|'
 #define HORIZONTAL_WALL '-'
 
@@ -27,3 +28,4 @@ void find_pos(MAP* game_map,POS* coord_position, char c);
 int isvalid(MAP* game_map, int x, int y);
 int isempty(MAP* game_map, int x, int y);
 void walk_on_map(MAP* game_map, int x0, int y0, int x, int y);
+void copy_map(MAP* final_map, MAP* initial_map);

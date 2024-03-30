@@ -6,3 +6,4 @@
 int finish();
 void moove(char direction);
 int isdirection(char direction);
+void phantom_move();
