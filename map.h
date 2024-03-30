@@ -26,4 +26,4 @@ void print_map(MAP * game_map);
 void find_pos(MAP* game_map,POS* coord_position, char c);
 int isvalid(MAP* game_map, int x, int y);
 int isempty(MAP* game_map, int x, int y);
-void walk_on_map(MAP* game_map, POS* coord_position, int x, int y);
+void walk_on_map(MAP* game_map, int x0, int y0, int x, int y);

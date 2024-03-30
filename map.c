@@ -13,11 +13,12 @@ int isempty(MAP* game_map, int x, int y) {
     return game_map->matrix[x][y] == VOID;
 }
 
-void walk_on_map(MAP* game_map, POS* coord_position, int x, int y) {
-    game_map->matrix[x][y] = '@';
-    game_map->matrix[coord_position->x][coord_position->y] = VOID;
-    coord_position->x = x;
-    coord_position->y = y;
+void walk_on_map(MAP* game_map, int x0, int y0, int x, int y) {
+    
+
+    char character = game_map->matrix[x0][y0];
+    game_map->matrix[x][y] = character;
+    game_map->matrix[x0][y0] = VOID;
 }
 
 void find_pos(MAP* game_map, POS* coord_position, char c) {

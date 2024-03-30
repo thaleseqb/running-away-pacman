@@ -42,7 +42,9 @@ void moove(char direction) {
     if (!isvalid(&game_map, nextX, nextY)) return;
     if (!isempty(&game_map, nextX, nextY)) return;
 
-    walk_on_map(&game_map, &coord_position, nextX, nextY);
+    walk_on_map(&game_map, coord_position.x, coord_position.y, nextX, nextY);
+    coord_position.x = nextX;
+    coord_position.y = nextY;
     
 }
 
