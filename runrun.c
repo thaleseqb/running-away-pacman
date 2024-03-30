@@ -1,10 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "header.h"
+#include <time.h>
 #include "map.h"
 
 MAP game_map;
 POS coord_position;
+
+int phantom_direction(int x_cur, int y_cur, int* xf, int *yf) {
+
+    int options[4][2] = {
+        {x_cur, y_cur+1},
+        {x_cur+1, y_cur},
+        {x_cur, y_cur-1},
+        {x_cur-1, y_cur},
+    };
+
+    srand(time(0));
+    for (int idx = 0; idx < 10; idx++) {
+        int position = rand() % 4;
+        if (access_granted(&game_map, options[position][0], options[position][1], PHANTOM)) {
+            *xf = options[position][0];
+            *yf = options[position][1];
+
+            return 1;
+        }
+    }
+
+    return 0;
+
+}
 
 void phantom_move() {
     MAP copy;
@@ -13,16 +38,26 @@ void phantom_move() {
     for (int i_idx = 0; i_idx < game_map.lines; i_idx++) {
         for (int j_idx = 0; j_idx < game_map.columns; j_idx++) {
             if (copy.matrix[i_idx][j_idx] == PHANTOM) {
-                if (isvalid(&game_map, i_idx, j_idx + 1) && isempty(&game_map, i_idx, j_idx + 1)) {
-                    walk_on_map(&game_map, i_idx, j_idx, i_idx, j_idx + 1);
+
+                int xf;
+                int yf;
+
+                int found = phantom_direction(i_idx, j_idx, &xf, &yf);
+
+                if (found) {
+                    walk_on_map(&game_map, i_idx, j_idx, xf, yf);
                 }
             }
         }
     }
+
+    freemap(&copy);
 }
 
 int finish() {
-    return 0;
+    POS position;
+    int runing_away = find_pos(&game_map, &position, CHAR);
+     return !runing_away;
 }
 
 int isdirection(char direction) {
@@ -54,8 +89,7 @@ void moove(char direction) {
         break;
     }
 
-    if (!isvalid(&game_map, nextX, nextY)) return;
-    if (!isempty(&game_map, nextX, nextY)) return;
+    if (!access_granted(&game_map, nextX, nextY, CHAR)) return;
 
     walk_on_map(&game_map, coord_position.x, coord_position.y, nextX, nextY);
     coord_position.x = nextX;

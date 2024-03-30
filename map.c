@@ -3,6 +3,19 @@
 #include <string.h>
 #include "map.h"
 
+int ischaracter(MAP* game_map, int x, int y, char character) {
+    return game_map->matrix[x][y] == character;
+}
+
+int iswall(MAP* game_map, int x, int y) {
+    return game_map->matrix[x][y] == VERTICAL_WALL ||
+    game_map->matrix[x][y] == HORIZONTAL_WALL;
+}
+
+int access_granted(MAP* game_map, int x, int y, char character) {
+    return isvalid(game_map, x, y) && !iswall(game_map, x, y) && !ischaracter(game_map, x, y, character);
+}
+
 void copy_map(MAP* final_map, MAP* initial_map) {
     final_map->lines = initial_map->lines;
     final_map->columns = initial_map->columns;
@@ -31,16 +44,22 @@ void walk_on_map(MAP* game_map, int x0, int y0, int x, int y) {
     game_map->matrix[x0][y0] = VOID;
 }
 
-void find_pos(MAP* game_map, POS* coord_position, char c) {
+int find_pos(MAP* game_map, POS* coord_position, char c) {
     for (int i_idx = 0; i_idx < game_map->lines; i_idx++) {
         for (int j_idx = 0; j_idx < game_map->columns; j_idx++) {
             if (game_map->matrix[i_idx][j_idx] == c) {
                 coord_position->x = i_idx;
                 coord_position->y = j_idx;
-                break;
+                if (ischaracter(game_map, i_idx, j_idx, PHANTOM)) {
+                    return 0;
+                    } else {
+                    return 1;
+                    }
+                
             }
         }
     }
+    return 0;
 }
 
 void freemap(MAP* game_map) {
